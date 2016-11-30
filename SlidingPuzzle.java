@@ -13,111 +13,115 @@ import java.awt.event.*;
 
 public class SlidingPuzzle extends Applet implements ActionListener {
 
-    BoxCanvas c;
-    Button setButton, clearButton, toggleButton;
-    
-    public void init () {
-        setLayout(new BorderLayout());
-        setButton = new Button("Set");
-        setButton.setBackground(Color.white);
-        setButton.addActionListener(this);
-        clearButton = new Button("Clear");
-        clearButton.setBackground(Color.white);
-        clearButton.addActionListener(this);
-        toggleButton = new Button("Toggle");
-        toggleButton.setBackground(Color.white);
-        toggleButton.addActionListener(this);
-        Panel p = new Panel();
-        p.setBackground(Color.black);
-        p.add(setButton);
-        p.add(clearButton);
-        p.add(toggleButton);
-        add("North", p);
-        c = new BoxCanvas();
-        c.setBackground(Color.yellow);
-        c.addMouseListener(c);
-        add("Center", c);
-    }
-    
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == setButton) {
-            c.set();
-        } else if (e.getSource() == clearButton) {
-            c.clear();
-        } else if (e.getSource() == toggleButton) {
-            c.toggle();
-        }
-    }
+	puzzleCanvas c;
+	Button NGButton, resetButton, UploadButton;
+
+	public void init() {
+		setLayout(new BorderLayout());
+
+		NGButton = new Button("Set");
+		NGButton.setBackground(Color.white);
+		NGButton.addActionListener(this);
+		resetButton = new Button("Clear");
+		resetButton.setBackground(Color.white);
+		resetButton.addActionListener(this);
+		UploadButton = new Button("Toggle");
+		UploadButton.setBackground(Color.white);
+		UploadButton.addActionListener(this);
+		Panel p1 = new Panel();
+		p1.setLayout(new GridLayout(4, 4));
+		add("Center", p1);
+		c = new puzzleCanvas();
+		c.setBackground(Color.yellow);
+		c.addMouseListener(c);
+		// add("Center", c);
+		
+		for (int i=0; i<16;i++){
+			p1.add(c);
+		}
+
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == NGButton) {
+			c.set();
+		} else if (e.getSource() == resetButton) {
+			c.clear();
+		} else if (e.getSource() == UploadButton) {
+			c.toggle();
+		}
+	}
 }
 
 @SuppressWarnings("serial")
 
-class BoxCanvas extends Canvas implements MouseListener  {
+class puzzleCanvas extends Canvas implements MouseListener {
 
-    // instance variables representing the game go here
-    int n = 7;
-    boolean[] box = new boolean[n];
-    int size = 80;
-    int border = 20;
-    
+	// instance variables representing the game go here
+	int n = 16;
+	boolean[] box = new boolean[n];
+	int size = 80;
+	int border = 20;
 
-    // draw the boxes
-    public void paint(Graphics g) {
-        for (int i = 0; i < n; i++) {
-            if (box[i])
-                g.setColor(Color.red);
-            else
-                g.setColor(Color.green);
-            int x = i * size + border;
-            int y = border;
-            g.fillRect(x, y, size, size);
-            g.setColor(Color.black);
-            g.drawRect(x, y, size, size);
-        }
-    }
+	// draw the boxes
+	public void paint(Graphics g) {
+		g.setColor(Color.green);
+		int x = size + border;
+		int y = border;
+		g.fillRect(x, y, size, size);
+		g.setColor(Color.black);
+		g.drawRect(x, y, size, size);
+	}
 
-    // handle mouse events
-    public void mousePressed(MouseEvent event) {
-        Point p = event.getPoint();
 
-        // check if clicked in box area
+	// handle mouse events
+	public void mousePressed(MouseEvent event) {
+		Point p = event.getPoint();
 
-        int x = p.x - border;
-        int y = p.y - border;
+		// check if clicked in box area
 
-        if (x >= 0 && x < n*size &&
-            y >= 0 && y < size) {
+		int x = p.x - border;
+		int y = p.y - border;
 
-            int k = x / size;
-            //System.out.println(k);
-            box[k] = ! box[k];
-        }
-        repaint();
-    }
+		if (x >= 0 && x < n * size && y >= 0 && y < size) {
 
-    // methods called from the event handler of the main applet
+			int k = x / size;
+			// System.out.println(k);
+			box[k] = !box[k];
+		}
+		repaint();
+	}
 
-    public void set() {
-        for (int i = 0; i < n; i++)
-            box[i] = true;
-        repaint();
-    }
+	// methods called from the event handler of the main applet
 
-    public void clear() {
-        for (int i = 0; i < n; i++)
-            box[i] = false;
-        repaint();
-    }
+	public void set() {
+		for (int i = 0; i < n; i++)
+			box[i] = true;
+		repaint();
+	}
 
-    public void toggle() {
-        for (int i = 0; i < n; i++)
-            box[i] = ! box[i];
-        repaint();
-    }
+	public void clear() {
+		for (int i = 0; i < n; i++)
+			box[i] = false;
+		repaint();
+	}
 
-    // need these also because we implement a MouseListener
-    public void mouseReleased(MouseEvent event) { }
-    public void mouseClicked(MouseEvent event) { }
-    public void mouseEntered(MouseEvent event) { }
-    public void mouseExited(MouseEvent event) { }
+	public void toggle() {
+		for (int i = 0; i < n; i++)
+			box[i] = !box[i];
+		repaint();
+	}
+
+	// need these also because we implement a MouseListener
+	public void mouseReleased(MouseEvent event) {
+	}
+
+	public void mouseClicked(MouseEvent event) {
+	}
+
+	public void mouseEntered(MouseEvent event) {
+	}
+
+	public void mouseExited(MouseEvent event) {
+	}
 }
